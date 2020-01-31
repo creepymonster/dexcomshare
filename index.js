@@ -8,17 +8,22 @@ const fastify = require('fastify')({
   logger: IS_LOCAL
 });
 
-// Declare a route
-fastify.get('/config', function (request, reply) {
-  reply.send({
-    'NS_ADDRESS': NS_ADDRESS
-  })
-});
+const request = require('request');
 
-fastify.listen(PORT, ADDRESS, function (err, address) {
-  if (err) {
-    fastify.log.error(err)
-    process.exit(1)
+// declare a route
+fastify.get('/', async (req, reply) => {
+  const status = await request.get('https://rm--nightscout.herokuapp.com/api/v1/status');
+  return { status: status }
+})
+
+// run the server!
+const start = async () => {
+  try {
+    await fastify.listen(PORT, ADDRESS);
+  } catch (err) {
+    fastify.log.error(err);
+    process.exit(1);
   }
-  fastify.log.info(`server listening on ${address}`)
-});
+}
+
+start();
