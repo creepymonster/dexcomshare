@@ -1,27 +1,33 @@
 const request = require('request');
 const crypto = require('crypto');
 
+const authModule = require('./auth');
+const dataModule = require('./data');
+const helpModule = require('./help');
+
 const IS_LOCAL = !process.env.PORT;
 const PORT = process.env.PORT || 5000;
 const ADDRESS = IS_LOCAL ? '127.0.0.1' : '0.0.0.0';
 
-const shasum = crypto.createHash('sha1');
-shasum.update(process.env.NS_API_SECRET || '');
-
-const NS_API_HASH = shasum.digest('hex');
-const NS_ADDRESS = process.env.NS_ADDRESS || '';
+const NS_API_HASH = process.env.NS_API_HASH || '';
+const NS_ADDRESS = helpModule.readNSAddress(process.env.NS_ADDRESS || '');
 
 const fastify = require('fastify')({
   logger: IS_LOCAL
 });
 
-// declare a route
-fastify.get('/', async (req, reply) => {
+// declare auth route
+fastify.get('/ShareWebServices/Services/General/LoginPublisherAccountByName', async (req, reply) => authModule.getAuth(reply, req.query.accountName, req.query.password, req.query.applicationId));
+fastify.post('/ShareWebServices/Services/General/LoginPublisherAccountByName', async (req, reply) => authModule.getAuth(reply, req.body.accountName, req.body.password, req.body.applicationId));
+
+// declare data route
+fastify.get('/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues', async (req, reply) => {
+  console.log(req.query);
+
   return {
-    address: NS_ADDRESS,
-    hash: NS_API_HASH
+    done: true
   }
-})
+});
 
 // run the server!
 const start = async () => {
