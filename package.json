@@ -1,0 +1,21 @@
+{
+  "name": "dexcomshare",
+  "author": {
+    "name": "Reimar Metzen",
+    "email": "reimar.metzen@iti-software.de",
+    "url": "https://www.iti-software.de/"
+  },
+  "version": "0.0.1",
+  "private": true,
+  "engines": {
+    "node": "12.x"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "fastify": "^2.11.0"
+  },
+  "devDependencies": {}
+}
