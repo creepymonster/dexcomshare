@@ -10,8 +10,12 @@ fastify.get('/', function (request, reply) {
   reply.send({ hello: 'world' })
 });
 
-// Run the server!
-fastify.listen(PORT, '0.0.0.0', function (err, address) {
+let address = '127.0.0.1';
+if (PORT !== 5000) {
+  address = '0.0.0.0';
+}
+
+fastify.listen(PORT, address, function (err, address) {
   if (err) {
     fastify.log.error(err)
     process.exit(1)
