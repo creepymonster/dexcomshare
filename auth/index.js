@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 
-exports.getAuth = function(reply, accountName, password, applicationId) {
+exports.getAuth = async (reply, accountName, password, applicationId) => {
   const auth = crypto.randomBytes(16).toString("hex");
 
   reply

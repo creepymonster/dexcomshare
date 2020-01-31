@@ -1,6 +1,3 @@
-const request = require('request');
-const crypto = require('crypto');
-
 const authModule = require('./auth');
 const dataModule = require('./data');
 const helpModule = require('./help');
@@ -21,13 +18,8 @@ fastify.get('/ShareWebServices/Services/General/LoginPublisherAccountByName', as
 fastify.post('/ShareWebServices/Services/General/LoginPublisherAccountByName', async (req, reply) => authModule.getAuth(reply, req.body.accountName, req.body.password, req.body.applicationId));
 
 // declare data route
-fastify.get('/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues', async (req, reply) => {
-  console.log(req.query);
-
-  return {
-    done: true
-  }
-});
+fastify.get('/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues', async (req, reply) => dataModule.getData(reply, NS_ADDRESS, NS_API_HASH, req.query.sessionId, req.query.minutes, req.query.maxCount));
+fastify.post('/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues', async (req, reply) => dataModule.getData(reply, NS_ADDRESS, NS_API_HASH, req.body.sessionId, req.body.minutes, req.body.maxCount));
 
 // run the server!
 const start = async () => {
