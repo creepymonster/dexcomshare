@@ -11,6 +11,16 @@ $ npm start
 
 Your app should now be running on [localhost:5000](http://localhost:5000/).
 
+
+## Create on Heroku
+
+```
+$ heroku login
+$ heroku create {YOUR_SERVICE_NAME}
+$ heroku config:set -a {YOUR_SERVICE_NAME} NS_ADDRESS="YOUR_NS_ADDRESS" NS_API_SECRET="YOUR_NS_API_SECRET" 
+```
+
+
 ## Deploying to Heroku
 
 ```

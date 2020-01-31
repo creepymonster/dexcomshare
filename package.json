@@ -12,11 +12,15 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "npm run start:develop",
+    "start:normal": "node index.js",
+    "start:develop": "nodemon ./index.js"
   },
   "dependencies": {
     "fastify": "^2.11.0",
     "request": "^2.88.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
 }
