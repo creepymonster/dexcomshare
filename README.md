@@ -17,7 +17,7 @@ Your app should now be running on [localhost:5000](http://localhost:5000/).
 ```
 $ heroku login
 $ heroku create {YOUR_SERVICE_NAME}
-$ heroku config:set -a {YOUR_SERVICE_NAME} NS_ADDRESS="YOUR_NS_ADDRESS" NS_API_SECRET="YOUR_NS_API_SECRET" 
+$ heroku config:set -a {YOUR_SERVICE_NAME} NS_ADDRESS="YOUR_NS_ADDRESS" NS_API_HASH="SHA-1 YOUR API_SECRET" 
 ```
 
 
@@ -27,4 +27,10 @@ $ heroku config:set -a {YOUR_SERVICE_NAME} NS_ADDRESS="YOUR_NS_ADDRESS" NS_API_S
 $ heroku git:remote -a {YOUR_SERVICE_NAME}
 $ git push heroku master
 $ heroku open
+```
+
+
+## Redeploying to Heroku
+```
+$ git push heroku master
 ```
