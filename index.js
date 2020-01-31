@@ -4,18 +4,14 @@ const fastify = require('fastify')({
 });
 
 const PORT = process.env.PORT || 5000;
+const ADDRESS = process.env.PORT ? '0.0.0.0' : '127.0.0.1';
 
 // Declare a route
 fastify.get('/', function (request, reply) {
   reply.send({ hello: 'world' })
 });
 
-let address = '127.0.0.1';
-if (PORT !== 5000) {
-  address = '0.0.0.0';
-}
-
-fastify.listen(PORT, address, function (err, address) {
+fastify.listen(PORT, ADDRESS, function (err, address) {
   if (err) {
     fastify.log.error(err)
     process.exit(1)
