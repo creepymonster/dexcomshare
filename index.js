@@ -1,10 +1,10 @@
-const path = require('path');
-const fastify = require('fastify')({
-  logger: true
-});
-
+const IS_LOCAL = !process.env.PORT;
 const PORT = process.env.PORT || 5000;
-const ADDRESS = process.env.PORT ? '0.0.0.0' : '127.0.0.1';
+const ADDRESS = IS_LOCAL ? '127.0.0.1' : '0.0.0.0';
+
+const fastify = require('fastify')({
+  logger: IS_LOCAL
+});
 
 // Declare a route
 fastify.get('/', function (request, reply) {
