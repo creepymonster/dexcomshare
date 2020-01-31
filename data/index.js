@@ -58,9 +58,9 @@ exports.getData = async (reply, baseUrl, apiHash, sessionId, minutes, maxCount) 
         dexcomData.push({
           'DT': 'dt',
           'ST': 'st',
-          'WT': 'wt',
+          'Trend': convertToTrend(nsDataItem.direction),
           'Value': nsDataItem.sgv,
-          'Trend': convertToTrend(nsDataItem.direction)
+          'WT': 'wt'
         });
       }
 
