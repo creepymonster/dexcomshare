@@ -18,8 +18,8 @@ fastify.get('/ShareWebServices/Services/General/LoginPublisherAccountByName', as
 fastify.post('/ShareWebServices/Services/General/LoginPublisherAccountByName', async (req, reply) => await authModule.getAuth(reply, req.body.accountName, req.body.password, req.body.applicationId));
 
 // declare data route
-fastify.get('/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues', async (req, reply) => await dataModule.getData(reply, NS_ADDRESS, NS_API_HASH, req.query.sessionId, req.query.minutes, req.query.maxCount));
-fastify.post('/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues', async (req, reply) => await dataModule.getData(reply, NS_ADDRESS, NS_API_HASH, req.body.sessionId, req.body.minutes, req.body.maxCount));
+fastify.get('/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues', async (req, reply) => await dataModule.getData(reply, NS_ADDRESS, NS_API_HASH, req.query.sessionId, req.query.maxCount));
+fastify.post('/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues', async (req, reply) => await dataModule.getData(reply, NS_ADDRESS, NS_API_HASH, req.body.sessionId, req.body.maxCount));
 
 // run the server!
 const start = async () => {

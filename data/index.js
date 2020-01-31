@@ -11,6 +11,12 @@ const TREND_NOT_COMPUTABLE = 8;
 const TREND_OUT_OF_RANGE = 9;
 const TREND_NONE = 0;
 
+const convertDate = (dateString) => {
+  const date = new Date(dateString);
+
+  return `/Date(${date.getTime()})/`;
+}
+
 const convertToTrend = (direction) => {
   switch (direction) {
     case 'DoubleUp':
@@ -36,7 +42,7 @@ const convertToTrend = (direction) => {
   return TREND_NONE;
 }
 
-exports.getData = async (reply, baseUrl, apiHash, sessionId, minutes, maxCount) => {
+exports.getData = async (reply, baseUrl, apiHash, sessionId, maxCount) => {
   return new Promise((resolve, reject) => {
     const count = maxCount || 3;
 
@@ -54,13 +60,14 @@ exports.getData = async (reply, baseUrl, apiHash, sessionId, minutes, maxCount) 
 
       for (let index = 0; index < nsData.length; index++) {
         const nsDataItem = nsData[index];
+        
 
         dexcomData.push({
-          'DT': 'dt',
-          'ST': 'st',
+          'DT': convertDate(nsDataItem.date),
+          'ST': convertDate(nsDataItem.date),
           'Trend': convertToTrend(nsDataItem.direction),
           'Value': nsDataItem.sgv,
-          'WT': 'wt'
+          'WT': convertDate(nsDataItem.date)
         });
       }
 
