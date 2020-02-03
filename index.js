@@ -18,7 +18,6 @@ const fastify = require('fastify')({
   logger: IS_LOCAL
 });
 
-// fastify.register(require('fastify-formbody'));
 // fastify.addContentTypeParser('*', function (req, done) { 
 //   var data = '';
 //   req.on('data', chunk => { data += chunk });
