@@ -25,12 +25,12 @@ const getInput = (req, key) => {
     return req.query[key];
   }
 
-  if (req.body && req.body[key] != null) {
-    return req.body[key];
-  }
-
   if (req.params && req.params[key] != null) {
     req.params[key];
+  }
+
+  if (req.body && req.body[key] != null) {
+    return req.body[key];
   }
 };
 
