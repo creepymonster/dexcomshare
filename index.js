@@ -18,35 +18,21 @@ const fastify = require('fastify')({
   logger: IS_LOCAL
 });
 
-// fastify.addContentTypeParser('*', function (req, done) { 
-//   var data = '';
-//   req.on('data', chunk => { data += chunk });
-//   req.on('end', () => { 
-//     done(null, data) 
-//   });
-// });
-
-const getInput = (req, key) => {
-  if (req.query && req.query[key] != null) {
-    return req.query[key];
-  }
-
-  if (req.params && req.params[key] != null) {
-    req.params[key];
-  }
-
-  if (req.body && req.body[key] != null) {
-    return req.body[key];
-  }
-};
+fastify.addContentTypeParser('application/json', function (req, done) { 
+  var data = '';
+  req.on('data', chunk => { data += chunk });
+  req.on('end', () => { 
+    done(null, data) 
+  });
+});
 
 // declare auth route
-fastify.get('/ShareWebServices/Services/General/LoginPublisherAccountByName', async (req, reply) => await authModule.getAuth(reply, getInput(req, 'accountName'), getInput(req, 'password'), getInput(req, 'applicationId')));
-fastify.post('/ShareWebServices/Services/General/LoginPublisherAccountByName', async (req, reply) => await authModule.getAuth(reply, getInput(req, 'accountName'), getInput(req, 'password'), getInput(req, 'applicationId')));
+fastify.get('/ShareWebServices/Services/General/LoginPublisherAccountByName', async (req, reply) => await authModule.getAuth(reply, helpModule.readParam(req, 'accountName'), helpModule.readParam(req, 'password'), helpModule.readParam(req, 'applicationId')));
+fastify.post('/ShareWebServices/Services/General/LoginPublisherAccountByName', async (req, reply) => await authModule.getAuth(reply, helpModule.readParam(req, 'accountName'), helpModule.readParam(req, 'password'), helpModule.readParam(req, 'applicationId')));
 
 // declare data route
-fastify.get('/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues', async (req, reply) => await dataModule.getData(reply, NS_ADDRESS, NS_API_HASH, getInput(req, 'sessionId'), getInput(req, 'maxCount')));
-fastify.post('/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues', async (req, reply) => await dataModule.getData(reply, NS_ADDRESS, NS_API_HASH, getInput(req, 'sessionId'), getInput(req, 'maxCount')));
+fastify.get('/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues', async (req, reply) => await dataModule.getData(reply, NS_ADDRESS, NS_API_HASH, helpModule.readParam(req, 'sessionId'), helpModule.readParam(req, 'maxCount')));
+fastify.post('/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues', async (req, reply) => await dataModule.getData(reply, NS_ADDRESS, NS_API_HASH, helpModule.readParam(req, 'sessionId'), helpModule.readParam(req, 'maxCount')));
 
 // run the server!
 const start = async () => {
