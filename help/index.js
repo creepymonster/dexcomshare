@@ -11,7 +11,11 @@ exports.readParam = function(req, key) {
     return req.params[key];
   }
 
-  if (req.body && req.body[key] != null) {
-    return req.body[key];
+  if (req.body) {
+    const parsedBody = JSON.parse(req.body);
+
+    if (parsedBody) {
+      return parsedBody[key];
+    }
   }
 }
