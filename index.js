@@ -19,6 +19,13 @@ const fastify = require('fastify')({
 });
 
 fastify.register(require('fastify-formbody'));
+fastify.addContentTypeParser('*', function (req, done) { 
+  var data = '';
+  req.on('data', chunk => { data += chunk });
+  req.on('end', () => { 
+    done(null, data) 
+  });
+});
 
 const getInput = (req, key) => {
   if (req.query && req.query[key] != null) {
