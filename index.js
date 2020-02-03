@@ -11,13 +11,16 @@ if (IS_LOCAL) {
   dotenv.config();
 }
 
+// read settings
 const NS_API_HASH = process.env.NS_API_HASH || '';
 const NS_ADDRESS = helpModule.readNSAddress(process.env.NS_ADDRESS || '');
 
+// init fastify
 const fastify = require('fastify')({
   logger: IS_LOCAL
 });
 
+// fix empty body bug
 fastify.addContentTypeParser('application/json', function (req, done) { 
   var data = '';
   req.on('data', chunk => { data += chunk });
