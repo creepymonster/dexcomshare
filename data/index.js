@@ -1,5 +1,7 @@
 const request = require('request');
+const helpModule = require('./../help');
 
+// other constants
 const TREND_DOUBLE_UP = 1;
 const TREND_SINGLE_UP = 2;
 const TREND_UP_45 = 3;
@@ -42,25 +44,26 @@ const convertToTrend = (direction) => {
   return TREND_NONE;
 }
 
-exports.getData = async (reply, baseUrl, apiHash, sessionId, maxCount) => {
-  return new Promise((resolve, reject) => {
-    const count = maxCount || 3;
+exports.getData = async (fastify, reply, sessionId, maxCount) => {
+  const NS_ADDRESS = helpModule.readNSAddress(process.env.NS_ADDRESS || '');
+  const NS_API_HASH = process.env.NS_API_HASH || '';
 
-    const requestOptions = {
-      url: `${baseUrl}/api/v1/entries.json?count=${count}&units=mgdl&find[sgv][$gt]=0`,
-      headers: {
-        'api-secret': apiHash,
-        'accept': 'application/json'
-      }
+  const count = maxCount || 3;
+  const requestOptions = {
+    url: `${NS_ADDRESS}/api/v1/entries.json?count=${count}&units=mgdl&find[sgv][$gt]=0`,
+    headers: {
+      'api-secret': NS_API_HASH,
+      'accept': 'application/json'
     }
+  };
 
+  return new Promise((resolve, reject) => {
     const requestCallback = (error, response, body) => {
       const nsData = JSON.parse(body);
       const dexcomData = [];
 
       for (let index = 0; index < nsData.length; index++) {
         const nsDataItem = nsData[index];
-        
 
         dexcomData.push({
           'DT': convertDate(nsDataItem.date),
@@ -74,6 +77,14 @@ exports.getData = async (reply, baseUrl, apiHash, sessionId, maxCount) => {
       resolve(dexcomData);
     };
 
-    request(requestOptions, requestCallback)
+    fastify.level.get('AUTH_KEY', (error, value) => {
+      console.log(error, value, sessionId);
+
+      if (sessionId !== '' && value === sessionId) {
+        request(requestOptions, requestCallback);
+      } else {
+        resolve([]);
+      }
+    });
   });
 };
