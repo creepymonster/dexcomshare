@@ -17,7 +17,7 @@ Your app should now be running on [localhost:5000](http://localhost:5000/).
 ```
 $ heroku login
 $ heroku create {YOUR_SERVICE_NAME}
-$ heroku config:set -a {YOUR_SERVICE_NAME} NS_ADDRESS="YOUR_NS_ADDRESS" NS_API_HASH="SHA-1 YOUR API_SECRET" 
+$ heroku config:set -a {YOUR_SERVICE_NAME} NS_ADDRESS="YOUR_NS_ADDRESS" NS_API_HASH="SHA-1 YOUR API_SECRET" API_USER="YOUR_DEXCOM_USERNAME" API_PWD="YOUR_DEXCOM_SECRET"
 ```
 
 
