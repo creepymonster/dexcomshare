@@ -17,6 +17,7 @@
     "start:develop": "nodemon ./index.js"
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "fastify": "^2.11.0",
     "request": "^2.88.0"
   },
