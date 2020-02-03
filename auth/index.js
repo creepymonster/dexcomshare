@@ -14,6 +14,6 @@ exports.getAuth = async (fastify, reply, accountName, password, applicationId) =
     });
   } else {
     reply.code(401);
-    reply.send({ was: 'unauthorized' });
+    reply.send({ code: 410, message: 'unauthorized' });
   }
 };
