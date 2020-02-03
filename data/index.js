@@ -48,9 +48,6 @@ exports.getData = async (fastify, reply, sessionId, maxCount) => {
   const NS_ADDRESS = helpModule.readNSAddress(process.env.NS_ADDRESS || '');
   const NS_API_HASH = process.env.NS_API_HASH || '';
 
-  console.log('NS_ADDRESS', NS_ADDRESS);
-  console.log('NS_API_HASH', NS_API_HASH);
-
   const count = maxCount || 3;
   const requestOptions = {
     url: `${NS_ADDRESS}/api/v1/entries.json?count=${count}&units=mgdl&find[sgv][$gt]=0`,
@@ -81,8 +78,6 @@ exports.getData = async (fastify, reply, sessionId, maxCount) => {
     };
 
     fastify.level.get('AUTH_KEY', (error, value) => {
-      console.log(error, value, sessionId);
-
       if (sessionId !== '' && value === sessionId) {
         request(requestOptions, requestCallback);
       } else {
