@@ -7,7 +7,7 @@ exports.getAuth = async (fastify, reply, accountName, password, applicationId) =
   if (accountName === API_USER && password === API_PWD) {
     const auth = crypto.randomBytes(16).toString("hex");
 
-    fastify.level.put('AUTH_KEY', auth, (err) => {
+    fastify.level.put(auth, true, (err) => {
       reply.code(200);
       reply.header('Content-Type', 'application/json; charset=utf-8');
       reply.send(auth);

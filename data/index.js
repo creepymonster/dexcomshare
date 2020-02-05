@@ -48,7 +48,7 @@ exports.getData = async (fastify, reply, sessionId, maxCount) => {
   const NS_ADDRESS = helpModule.readNSAddress(process.env.NS_ADDRESS || '');
   const NS_API_HASH = process.env.NS_API_HASH || '';
 
-  const count = maxCount || 3;
+  const count = Math.min(1440, maxCount || 3);
   const requestOptions = {
     url: `${NS_ADDRESS}/api/v1/entries.json?count=${count}&units=mgdl&find[sgv][$gt]=0`,
     headers: {
@@ -58,6 +58,10 @@ exports.getData = async (fastify, reply, sessionId, maxCount) => {
   };
 
   return new Promise((resolve, reject) => {
+    if (!sessionId) {
+      resolve([]);
+    }
+
     const requestCallback = (error, response, body) => {
       const nsData = JSON.parse(body);
       const dexcomData = [];
@@ -77,8 +81,8 @@ exports.getData = async (fastify, reply, sessionId, maxCount) => {
       resolve(dexcomData);
     };
 
-    fastify.level.get('AUTH_KEY', (error, value) => {
-      if (sessionId !== '' && value === sessionId) {
+    fastify.level.get(sessionId, (error, value) => {
+      if (value && value === 'true') {
         request(requestOptions, requestCallback);
       } else {
         resolve([]);

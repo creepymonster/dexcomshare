@@ -1,10 +1,27 @@
 {
   "name": "Dexcom Share",
-  "description": "",
-  "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/master/public/node.svg",
-  "keywords": [
-    "node",
-    "heroku"
-  ],
+  "repository": "https://github.com/creepymonster/dexcomshare",
+  "env": {
+    "NS_ADDRESS": {
+      "description": "Use your nightscout url, for example a heroku url",
+      "value": "https://your-nightscout-heroku-url.herokuapp.com",
+      "required": true
+    },
+    "NS_API_HASH": {
+      "description": "Create a SHA-1 of your nightscout API_SECRET",
+      "value": "",
+      "required": true
+    },
+    "API_USER": {
+      "description": "Secure your Dexcom Share API with this username",
+      "value": "share",
+      "required": true
+    },
+    "API_PWD": {
+      "description": "Secure your Dexcom Share API with this password",
+      "value": "Test123!",
+      "required": true
+    }
+  },
   "image": "heroku/nodejs"
 }

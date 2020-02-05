@@ -18,19 +18,21 @@ const fastify = require('fastify')({
 
 // register leveldb plugin
 fastify.register(require('fastify-leveldb'), {
-  name: 'db'
+  options: {
+    store: require('memdown')
+  }
 }, err => {
   if (err) {
     throw err;
   }
-})
+});
 
 // fix empty body bug
-fastify.addContentTypeParser('application/json', function (req, done) { 
+fastify.addContentTypeParser('application/json', function (req, done) {
   var data = '';
   req.on('data', chunk => { data += chunk });
-  req.on('end', () => { 
-    done(null, data) 
+  req.on('end', () => {
+    done(null, data)
   });
 });
 
