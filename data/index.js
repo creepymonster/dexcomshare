@@ -6,15 +6,15 @@ const data = async (fastify, req, reply) => {
     const NS_ADDRESS = help.readNSAddress(process.env.NS_ADDRESS || '');
     const NS_API_HASH = process.env.NS_API_HASH || '';
 
-    console.log('request data');
-    console.log(`request data, environment variable ns_address: ${NS_ADDRESS}`);
-    console.log(`request data, environment variable ns_api_hash: ${NS_API_HASH}`);
+    console.log('Request data');
+    console.log(`Request data, environment variable ns_address: ${NS_ADDRESS}`);
+    console.log(`Request data, environment variable ns_api_hash: ${NS_API_HASH}`);
 
     const sessionId = help.readParam(req, 'sessionId');
     const maxCount = Math.min(1440, help.readParam(req, 'maxCount') || 3);
 
-    console.log(`request data, input variable sessionId: ${sessionId}`);
-    console.log(`request data, input variable maxCount: ${maxCount}`);
+    console.log(`Request data, input variable sessionId: ${sessionId}`);
+    console.log(`Request data, input variable maxCount: ${maxCount}`);
 
     const reqOptions = {
       url: `${NS_ADDRESS}/api/v1/entries.json?count=${maxCount}&units=mgdl&find[sgv][$gt]=0`,
@@ -57,7 +57,7 @@ const data = async (fastify, req, reply) => {
 };
 
 const routes = async (fastify, options) => {
-  console.log('init data');
+  console.log('Init data');
 
   const ROUTE = '/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues';
 

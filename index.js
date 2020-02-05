@@ -2,9 +2,9 @@ const IS_LOCAL = !process.env.PORT;
 const PORT = process.env.PORT || 5000;
 const ADDRESS = IS_LOCAL ? '127.0.0.1' : '0.0.0.0';
 
-console.log('init..');
-console.log(`init environment variable is_local: ${IS_LOCAL}`);
-console.log(`init environment variable address: ${ADDRESS}:${PORT}`);
+console.log('Init..');
+console.log(`Init environment variable is_local: ${IS_LOCAL}`);
+console.log(`Init environment variable address: ${ADDRESS}:${PORT}`);
 
 if (IS_LOCAL) {
   const dotenv = require('dotenv');
@@ -12,13 +12,13 @@ if (IS_LOCAL) {
 }
 
 // init fastify
-console.log('init fastify');
+console.log('Init fastify');
 const fastify = require('fastify')({
   logger: IS_LOCAL
 });
 
 // register leveldb plugin
-console.log('init fastify-leveldb');
+console.log('Init fastify-leveldb');
 fastify.register(require('fastify-leveldb'), {
   options: {
     store: require('memdown')
@@ -30,7 +30,7 @@ fastify.register(require('fastify-leveldb'), {
 });
 
 // fix empty body bug
-console.log('init fixes');
+console.log('Init fixes');
 fastify.addContentTypeParser('application/json', function (req, done) {
   var data = '';
   req.on('data', chunk => { data += chunk });
@@ -40,7 +40,7 @@ fastify.addContentTypeParser('application/json', function (req, done) {
 });
 
 // declare routes
-console.log('init routes');
+console.log('Init routes');
 fastify.register(require('./auth'));
 fastify.register(require('./data'));
 
@@ -54,5 +54,5 @@ const start = async () => {
   }
 }
 
-console.log('start fastify..');
+console.log('Start service..');
 start();
