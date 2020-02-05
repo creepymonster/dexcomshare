@@ -1,4 +1,3 @@
-const authModule = require('./auth');
 const dataModule = require('./data');
 const helpModule = require('./help');
 
@@ -7,8 +6,8 @@ const PORT = process.env.PORT || 5000;
 const ADDRESS = IS_LOCAL ? '127.0.0.1' : '0.0.0.0';
 
 console.log('INIT..');
-console.log(`INIT, IS_LOCAL ${IS_LOCAL}`);
-console.log(`INIT, ADDRESS ${ADDRESS}:${PORT}`);
+console.log(`INIT, is_local: ${IS_LOCAL}`);
+console.log(`INIT, address: ${ADDRESS}:${PORT}`);
 
 if (IS_LOCAL) {
   const dotenv = require('dotenv');
@@ -27,7 +26,7 @@ fastify.register(require('fastify-leveldb'), {
   options: {
     store: require('memdown')
   }
-}, err => {
+}, (err) => {
   if (err) {
     throw err;
   }
@@ -43,24 +42,14 @@ fastify.addContentTypeParser('application/json', function (req, done) {
   });
 });
 
-// declare auth route
-console.log('INIT, register GET(/ShareWebServices/Services/General/LoginPublisherAccountByName)');
-fastify.get('/ShareWebServices/Services/General/LoginPublisherAccountByName', async (req, reply) => {
-  return await authModule.getAuth(fastify, reply, helpModule.readParam(req, 'accountName'), helpModule.readParam(req, 'password'), helpModule.readParam(req, 'applicationId'));
-});
-
-console.log('INIT, register POST(/ShareWebServices/Services/General/LoginPublisherAccountByName)');
-fastify.post('/ShareWebServices/Services/General/LoginPublisherAccountByName', async (req, reply) => {
-  return await authModule.getAuth(fastify, reply, helpModule.readParam(req, 'accountName'), helpModule.readParam(req, 'password'), helpModule.readParam(req, 'applicationId'))
-});
+// declare routes
+fastify.register(require('./auth'));
 
 // declare data route
-console.log('INIT, register GET(/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues)');
 fastify.get('/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues', async (req, reply) => {
   return await dataModule.getData(fastify, reply, helpModule.readParam(req, 'sessionId'), helpModule.readParam(req, 'maxCount'))
 });
 
-console.log('INIT, register POST(/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues)');
 fastify.post('/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues', async (req, reply) => {
   return await dataModule.getData(fastify, reply, helpModule.readParam(req, 'sessionId'), helpModule.readParam(req, 'maxCount'))
 });

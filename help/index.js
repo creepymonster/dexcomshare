@@ -2,19 +2,19 @@ exports.readNSAddress = function(address) {
   return address.replace(/\/$/, "");
 };
 
-exports.readParam = function(req, key) {
-  if (req.body && req.body !== '') {
-    const parsedBody = JSON.parse(req.body);
+exports.readParam = function(request, key) {
+  if (request.body && request.body !== '') {
+    const parsedBody = JSON.parse(request.body);
     if (parsedBody) {
       return parsedBody[key];
     }
   }
 
-  if (req.params && req.params[key] != null) {
-    return req.params[key];
+  if (request.params && request.params[key] != null) {
+    return request.params[key];
   }
 
-  if (req.query && req.query[key] != null) {
-    return req.query[key];
+  if (request.query && request.query[key] != null) {
+    return request.query[key];
   }
 }
