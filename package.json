@@ -2,8 +2,11 @@
   "name": "dexcomshare",
   "author": {
     "name": "Reimar Metzen",
-    "email": "reimar.metzen@iti-software.de",
-    "url": "https://www.iti-software.de/"
+    "email": "reimarmetzen@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/creepymonster/dexcomshare.git"
   },
   "version": "0.0.1",
   "private": true,
