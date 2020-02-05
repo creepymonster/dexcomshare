@@ -1,68 +1,30 @@
 const request = require('request');
-const helpModule = require('./../help');
+const help = require('./../help');
 
-// other constants
-const TREND_DOUBLE_UP = 1;
-const TREND_SINGLE_UP = 2;
-const TREND_UP_45 = 3;
-const TREND_FLAT = 4;
-const TREND_DOWN_45 = 5;
-const TREND_SINGLE_DOWN = 6;
-const TREND_DOUBLE_DOWN = 7;
-const TREND_NOT_COMPUTABLE = 8;
-const TREND_OUT_OF_RANGE = 9;
-const TREND_NONE = 0;
-
-const convertDate = (dateString) => {
-  const date = new Date(dateString);
-
-  return `/Date(${date.getTime()})/`;
-}
-
-const convertToTrend = (direction) => {
-  switch (direction) {
-    case 'DoubleUp':
-      return TREND_DOUBLE_UP;
-    case 'SingleUp':
-      return TREND_SINGLE_UP;
-    case 'FortyFiveUp':
-      return TREND_UP_45;
-    case 'Flat':
-      return TREND_FLAT;
-    case 'FortyFiveDown':
-      return TREND_DOWN_45;
-    case 'SingleDown':
-      return TREND_SINGLE_DOWN;
-    case 'DoubleDown':
-      return TREND_DOUBLE_DOWN;
-    case 'NOT COMPUTABLE':
-      return TREND_NOT_COMPUTABLE;
-    case 'OUT OF RANGE':
-      return TREND_OUT_OF_RANGE;
-  }
-
-  return TREND_NONE;
-}
-
-exports.getData = async (fastify, reply, sessionId, maxCount) => {
-  const NS_ADDRESS = helpModule.readNSAddress(process.env.NS_ADDRESS || '');
-  const NS_API_HASH = process.env.NS_API_HASH || '';
-
-  const count = Math.min(1440, maxCount || 3);
-  const requestOptions = {
-    url: `${NS_ADDRESS}/api/v1/entries.json?count=${count}&units=mgdl&find[sgv][$gt]=0`,
-    headers: {
-      'api-secret': NS_API_HASH,
-      'accept': 'application/json'
-    }
-  };
-
+const data = async (fastify, req, reply) => {
   return new Promise((resolve, reject) => {
-    if (!sessionId) {
-      resolve([]);
-    }
+    const NS_ADDRESS = help.readNSAddress(process.env.NS_ADDRESS || '');
+    const NS_API_HASH = process.env.NS_API_HASH || '';
 
-    const requestCallback = (error, response, body) => {
+    console.log('data');
+    console.log(`data, environment variable ns_address: ${NS_ADDRESS}`);
+    console.log(`data, environment variable ns_api_hash: ${NS_API_HASH}`);
+
+    const sessionId = help.readParam(req, 'sessionId');
+    const maxCount = Math.min(1440, help.readParam(req, 'maxCount') || 3);
+
+    console.log(`data, input variable sessionId: ${sessionId}`);
+    console.log(`data, input variable maxCount: ${maxCount}`);
+
+    const reqOptions = {
+      url: `${NS_ADDRESS}/api/v1/entries.json?count=${maxCount}&units=mgdl&find[sgv][$gt]=0`,
+      headers: {
+        'api-secret': NS_API_HASH,
+        'accept': 'application/json'
+      }
+    };
+
+    const reqCallback = (err, resp, body) => {
       const nsData = JSON.parse(body);
       const dexcomData = [];
 
@@ -70,23 +32,37 @@ exports.getData = async (fastify, reply, sessionId, maxCount) => {
         const nsDataItem = nsData[index];
 
         dexcomData.push({
-          'DT': convertDate(nsDataItem.date),
-          'ST': convertDate(nsDataItem.date),
-          'Trend': convertToTrend(nsDataItem.direction),
+          'DT': help.convertDate(nsDataItem.date),
+          'ST': help.convertDate(nsDataItem.date),
+          'Trend': help.convertToTrend(nsDataItem.direction),
           'Value': nsDataItem.sgv,
-          'WT': convertDate(nsDataItem.date)
+          'WT': help.convertDate(nsDataItem.date)
         });
       }
 
+      reply.code(200);
+      reply.header('Content-Type', 'application/json; charset=utf-8');
       resolve(dexcomData);
     };
 
-    fastify.level.get(sessionId, (error, value) => {
-      if (value && value === 'true') {
-        request(requestOptions, requestCallback);
+    fastify.level.get(sessionId, (err, value) => {
+      if (!err && value && value === 'true') {
+        request(reqOptions, reqCallback);
       } else {
-        resolve([]);
+        reply.code(401);
+        reject(new Error('401 Unauthorized'));
       }
     });
   });
 };
+
+const routes = async (fastify, options) => {
+  console.log('init, data');
+
+  const ROUTE = '/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues';
+
+  fastify.get(ROUTE, async (request, reply) => data(fastify, request, reply));
+  fastify.post(ROUTE, async (request, reply) => data(fastify, request, reply));
+};
+
+module.exports = routes
