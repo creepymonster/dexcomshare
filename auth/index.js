@@ -6,15 +6,13 @@ const auth = async (fastify, request, reply) => {
     const API_USER = process.env.API_USER || 'User';
     const API_PWD = process.env.API_PWD || '0001';
 
-    console.log('Request auth');
-    console.log(`Request auth, environment variable api_user: ${API_USER}`);
-    console.log(`Request auth, environment variable api_pwd: ${API_PWD}`);
+    console.log('Request route "auth"');
 
     const accountName = help.readParam(request, 'accountName');
     const password = help.readParam(request, 'password');
 
-    console.log(`Request auth, input variable accountName: ${accountName}`);
-    console.log(`Request auth, input variable password: ${password}`);
+    console.log(`Request route "auth", "accountName: ${accountName}"`);
+    console.log(`Request route "auth", "password: ${password}"`);
 
     if (accountName === API_USER && password === API_PWD) {
       const auth = crypto.randomBytes(16).toString("hex");
@@ -36,7 +34,7 @@ const auth = async (fastify, request, reply) => {
 };
 
 const routes = async (fastify, options) => {
-  console.log('Init auth');
+  console.log('Init route "auth"');
   
   const ROUTE = '/ShareWebServices/Services/General/LoginPublisherAccountByName';
 

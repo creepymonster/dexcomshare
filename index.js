@@ -3,8 +3,8 @@ const PORT = process.env.PORT || 5000;
 const ADDRESS = IS_LOCAL ? '127.0.0.1' : '0.0.0.0';
 
 console.log('Init..');
-console.log(`Init environment variable is_local: ${IS_LOCAL}`);
-console.log(`Init environment variable address: ${ADDRESS}:${PORT}`);
+console.log(`Init "is_local: ${IS_LOCAL}"`);
+console.log(`Init "address: ${ADDRESS}:${PORT}"`);
 
 if (IS_LOCAL) {
   const dotenv = require('dotenv');
@@ -12,13 +12,13 @@ if (IS_LOCAL) {
 }
 
 // init fastify
-console.log('Init fastify');
+console.log('Init "fastify"');
 const fastify = require('fastify')({
   logger: IS_LOCAL
 });
 
 // register leveldb plugin
-console.log('Init fastify-leveldb');
+console.log('Init "fastify-leveldb"');
 fastify.register(require('fastify-leveldb'), {
   options: {
     store: require('memdown')
