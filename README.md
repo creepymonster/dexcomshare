@@ -4,7 +4,7 @@ Make sure you have [Node.js](http://nodejs.org/) and the [Heroku CLI](https://cl
 
 ```sh
 $ git clone https://github.com/creepymonster/dexcomshare.git {YOUR_SERVICE_NAME} # or clone your own fork
-$ cd dexcomshare
+$ cd {YOUR_SERVICE_NAME}
 $ npm install
 $ npm start
 ```
