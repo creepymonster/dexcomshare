@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "dotenv": "^8.2.0",
-    "fastify": "^2.11.0",
+    "fastify": "^2.15.1",
     "fastify-leveldb": "^2.1.0",
     "memdown": "^5.1.0",
     "request": "^2.88.0"
